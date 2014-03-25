@@ -50,7 +50,7 @@ The key must be DBNAME and the value should be the root of the DBName. For examp
 Press F5 to run the program once from Visual Studio to ensure this is working before continuing.
 
 
-### Step 3. Add an ASPX page to display when the database name provide isn't valid
+### Step 3. Add an ASPX page to display when the database name provided isn't valid
 
 The code below is stubbed in to ensure that the database provided is valid. If the database name provide isn't valid, control will be passed to an `ASPX` page. Add a standard (not a Mobile RPG display file page) `ASPX` page in the root of your project and name it `DBNameError.aspx.` Add whatever text or images you want to this page to help inform the user about what has happened. 
  
