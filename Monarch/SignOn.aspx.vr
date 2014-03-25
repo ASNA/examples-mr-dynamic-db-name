@@ -1,0 +1,30 @@
+﻿using System
+using System.Data
+using System.Web
+using System.Web.SessionState
+using System.Web.UI
+using System.Web.UI.WebControls
+using System.Web.UI.HtmlControls
+
+BegClass SignOn Partial(*Yes) Extends(ASNA.Monarch.WebDspF.Page)
+
+    BegSr Page_Load Access(*Private) Event(*This.Load)
+        DclSrParm sender Type(*Object)
+        DclSrParm e Type(System.EventArgs)
+
+        If (NOT Page.IsPostBack)
+
+//            RSignon_User.Value = DBName 
+
+            //
+            // Called the first time that the page is loaded.
+            //
+        Else
+            //
+            // Called subsequent times that the page is displayed.
+            //
+        EndIf
+    EndSr
+
+
+EndClass
