@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Examples-mr-dynamic-db-name : This Mobile RPG example shows how to dynamically determine the database name from a value provided on the query string." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Examples-mr-dynamic-db-name</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ASNA/examples-mr-dynamic-db-name">View on GitHub</a>
+
+          <h1 id="project_title">Examples-mr-dynamic-db-name</h1>
+          <h2 id="project_tagline">This Mobile RPG example shows how to dynamically determine the database name from a value provided on the query string.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ASNA/examples-mr-dynamic-db-name/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ASNA/examples-mr-dynamic-db-name/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="dynamically-override-mrs-database-connection" class="anchor" href="#dynamically-override-mrs-database-connection"><span class="octicon octicon-link"></span></a>Dynamically override MR's database connection</h2>
+
+<p>These instructions, and its accompanying example, show how to dynamically override MR's database connection at runtime. This technique uses a value provided in the query string to determine what database name should be used. </p>
+
+<h3>
+<a name="step-1-configure-the-app-to-use-a-database-name" class="anchor" href="#step-1-configure-the-app-to-use-a-database-name"><span class="octicon octicon-link"></span></a>Step 1. Configure the app to use a database name</h3>
+
+<p>By default, MR apps prompt the user for logon credentials. To force the app to bypass that signon screen and use a previously configured database name, find the <code>web.config</code> file in the root folder of your project. Open it with Visual Studio. </p>
+
+<p>At the end of that file are several <code>appSettings.</code> You want to specify only: </p>
+
+<ul>
+<li>MobileRPGLibraryName</li>
+<li>MobileRPGPogramName</li>
+<li>MobileRPGDatabaseName </li>
+</ul><p>You'll probably need to add <code>MobileRPGDataBaseName.</code> Comments in XML start with <code>&lt;!--</code> and end with <code>--&gt;</code>. You can comment out the unused <code>appSettings</code> keys or delete them.</p>
+
+<p>When you're done, the end of the <code>web.config</code> should look like this where the default database name along with the library and program name (the order of these values isn't significant). This document provides further instructions on how to override this default database name at runtime with a value provided from the query string.</p>
+
+<pre><code>&lt;!--
+    &lt;add key="MobileRPGUsername" value="nnnnn"/&gt;
+    &lt;add key="MobileRPGServerName" value=""/&gt;
+    &lt;add key="MobileRPGServerPort" value="5110"/&gt;
+    &lt;add key="MobileRPGPromptForServer" value="yes"/&gt;
+--&gt;
+
+    &lt;add key="MobileRPGLibraryName" value="rppass"/&gt;
+    &lt;add key="MobileRPGProgramName" value="HelloRPG"/&gt;
+    &lt;add key="MobileRPGDatabaseName" value="*Public/MRX"/&gt;
+
+  &lt;/appSettings&gt;
+&lt;/configuration&gt;
+</code></pre>
+
+<h3>
+<a name="step-2-specify-a-test-url-to-launch-the-app-in-visual-studio" class="anchor" href="#step-2-specify-a-test-url-to-launch-the-app-in-visual-studio"><span class="octicon octicon-link"></span></a>Step 2. Specify a test URL to launch the app in Visual Studio</h3>
+
+<p>At runtime, users will launch your app with a URL you provide for them--or, specifically in Roto Rooter's case, with a URL provided by the Java program the mobile app uses. To test your mobile app in Visual Studio, you need to manually provide a URL with the query string value set. </p>
+
+<p>Do this by using Visual Studio's top-level View-&gt;Property Pages menu. Select the Start Options entry from the dialog displayed.</p>
+
+<p><img src="https://dl.dropboxusercontent.com/u/19172063/ProjectProperties.png" alt=""></p>
+
+<p>In the yellow box, put the URL of your app used by Visual Studio. You'll need to run the app and copy the URL from the browser's address bar to make sure you get the port correct. Append a query string key and value as shown below.   </p>
+
+<pre><code>http://localhost:3333/PassServerName/Monarch/SignOn.aspx?DBNAME=MR
+</code></pre>
+
+<p>The key must be DBNAME and the value should be the root of the DBName. For example, if your DB name is <code>*Public/MR</code> then DBNAME's value should be <code>MR</code>. Don't forget the question mark! </p>
+
+<p>Press F5 to run the program once from Visual Studio to ensure this is working before continuing.</p>
+
+<h3>
+<a name="step-3-add-an-aspx-page-to-display-when-the-database-name-provide-isnt-valid" class="anchor" href="#step-3-add-an-aspx-page-to-display-when-the-database-name-provide-isnt-valid"><span class="octicon octicon-link"></span></a>Step 3. Add an ASPX page to display when the database name provide isn't valid</h3>
+
+<p>The code below is stubbed in to ensure that the database provided is valid. If the database name provide isn't valid, control will be passed to an ASPX page. Add a standard (not a Mobile RPG display file page) ASPX page in the root of your project and name it <code>DBNameError.aspx.</code> Add whatever text or images you want to this page to help inform the user about what has happened. </p>
+
+<h3>
+<a name="step-4-determine-the-database-name-from-the-value-provided-on-the-query-string" class="anchor" href="#step-4-determine-the-database-name-from-the-value-provided-on-the-query-string"><span class="octicon octicon-link"></span></a>Step 4. Determine the database name from the value provided on the query string</h3>
+
+<p>In the root folder of your project you'll find a file named <code>Global.asax</code>. Three changes need to be made to this file. An overview of the changes needed are shown below (as an image--to easily provide the context of where the changes should go). Directly below the image is the three chunks of code you need presented as text for easy copy and pasting.  </p>
+
+<p><img src="https://dl.dropboxusercontent.com/u/19172063/globalasax.code.png" alt=""></p>
+
+<p>The image shows line numbers that may not be exactly the line numbers you see in your <code>Global.asax.</code> Don't worry about. Changes 1 and 2 are in the <code>Session_Start()</code> subroutine. If your line numbers are different, find that subroutine and work your way down from its beginning. You'll quickly see where this these changes go.   </p>
+
+<p>Change 1:</p>
+
+<pre><code>DclFld DBName Type(*String) 
+
+If ( Request["DBNAME"] &lt;&gt; *Nothing ) 
+    DBName = "*Public/" + Request["DBNAME"].ToString()
+Else 
+    // Default basebase name.
+    DBName = "*Public/MR" 
+EndIf 
+
+If NOT InWhiteList(DBName) 
+    Server.Transfer("~/DBNameError.aspx") 
+    LeaveSr 
+EndIf
+</code></pre>
+
+<p>Change 2: </p>
+
+<pre><code>Job.LDC["DB"] = DBName
+</code></pre>
+
+<p>Change 3:</p>
+
+<pre><code>BegFunc InWhiteList Type(*Boolean)
+    DclSrParm DBName Type(*String)
+
+    LeaveSr *True 
+EndFunc             
+</code></pre>
+
+<p><strong>Change 1:</strong> Fetches the <code>DBNAM</code>E value from the query string and prepends <code>*Public/</code> to it to make a public database name out of the root database name passed on the query string. If a <code>DBNAME</code> key isn't provided on the query string, the <code>Else</code> clause provides a default database name.  </p>
+
+<p>The database name is then passed to the <code>InWhiteList()</code> function (more on this function in a moment) to ensure the database name is valid. If it isn't, the app ends and the <code>DBNameError.aspx</code> page added in Step 3 is displayed. </p>
+
+<p>Change 2: The single line in Change 2 assigns the now-approved database name to the <code>DB</code> key of the LDC. LDC stands for Local Data Collection. The LDC provides a way to pass ad hoc data around in an MR (or Wings or Monarch) app. </p>
+
+<p>Change 3: Change stubs in the <code>InWhiteList()</code> function for approving the database name derived from the query string value provided. As provided here, this function unconditionally returns true, thereby approving all database names. Add your own logic here to approve database name values.</p>
+
+<h3>
+<a name="step-5-change-the-active-database-name-for-the-app" class="anchor" href="#step-5-change-the-active-database-name-for-the-app"><span class="octicon octicon-link"></span></a>Step 5. Change the active database name for the app.</h3>
+
+<p>There is a file named MobileRPGJob.vr in the root folder of your project. Open it with Visual Studio and find the <code>Connect</code> subroutine (at about line 150 or 160). The end of that subroutine will look like this:</p>
+
+<pre><code>        ...
+        ...
+        ...
+        If *not hasDbName
+            myDatabase.Server = logonInfo.Server
+            myDatabase.Port = logonInfo.Port
+            myDatabase.User = logonInfo.User
+            myDatabase.Password = logonInfo.Password
+        EndIf
+        try
+            myDataBase.DBName = *This.LDC["DB"].ToString()
+            CONNECT myDatabase
+            leave
+        catch dgEx dgException
+            logonInfo.Message = dgEx.Message
+            hasDbName = *false
+        endtry
+    enddo
+
+    PsdsJobUser = myDatabase.User
+    leavesr *true
+EndFunc
+</code></pre>
+
+<p>Immediately after the Try statement, add this line:</p>
+
+<pre><code>myDataBase.DBName = *This.LDC["DB"].ToString()
+</code></pre>
+
+<p>The end of the <code>Connect</code> subroutine should now look like this:</p>
+
+<pre><code>        ...
+        ...
+        ...
+        If *not hasDbName
+            myDatabase.Server = logonInfo.Server
+            myDatabase.Port = logonInfo.Port
+            myDatabase.User = logonInfo.User
+            myDatabase.Password = logonInfo.Password
+        EndIf
+        try
+            myDataBase.DBName = *This.LDC["DB"].ToString()
+            CONNECT myDatabase
+            leave
+        catch dgEx dgException
+            logonInfo.Message = dgEx.Message
+            hasDbName = *false
+        endtry
+    enddo
+
+    PsdsJobUser = myDatabase.User
+    leavesr *true
+EndFunc
+</code></pre>
+
+<p>Your MR app will connect with the DB name specified. </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Examples-mr-dynamic-db-name maintained by <a href="https://github.com/ASNA">ASNA</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
