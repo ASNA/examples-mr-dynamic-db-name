@@ -52,7 +52,7 @@ Press F5 to run the program once from Visual Studio to ensure this is working be
 
 ### Step 3. Add an ASPX page to display when the database name provide isn't valid
 
-The code below is stubbed in to ensure that the database provided is valid. If the database name provide isn't valid, control will be passed to an ASPX page. Add a standard (not a Mobile RPG display file page) ASPX page in the root of your project and name it `DBNameError.aspx.` Add whatever text or images you want to this page to help inform the user about what has happened. 
+The code below is stubbed in to ensure that the database provided is valid. If the database name provide isn't valid, control will be passed to an `ASPX` page. Add a standard (not a Mobile RPG display file page) `ASPX` page in the root of your project and name it `DBNameError.aspx.` Add whatever text or images you want to this page to help inform the user about what has happened. 
  
 ### Step 4. Determine the database name from the value provided on the query string
 
@@ -60,7 +60,7 @@ In the root folder of your project you'll find a file named `Global.asax`. Three
 
 ![](https://dl.dropboxusercontent.com/u/19172063/globalasax.code.png)
 
-The image shows line numbers that may not be exactly the line numbers you see in your `Global.asax.` Don't worry about. Changes 1 and 2 are in the `Session_Start()` subroutine. If your line numbers are different, find that subroutine and work your way down from its beginning. You'll quickly see where this these changes go.   
+The image shows line numbers that may not be exactly the line numbers you see in your `Global.asax.` Don't worry about it if the line numbers in your `Global.asax` aren't exactly as shown. Changes 1 and 2 are in the `Session_Start()` subroutine. If your line numbers are different, find that subroutine and work your way down from its beginning. You'll quickly see where these changes go.   
 
 Change 1:
 
@@ -90,17 +90,17 @@ Change 3:
         LeaveSr *True 
     EndFunc             
 
-**Change 1:** Fetches the `DBNAM`E value from the query string and prepends `*Public/` to it to make a public database name out of the root database name passed on the query string. If a `DBNAME` key isn't provided on the query string, the `Else` clause provides a default database name.  
+**Change 1:** Fetches the `DBNAME` value from the query string and prepends `*Public/` to it to make a public database name out of the root database name passed on the query string. If a `DBNAME` key isn't provided on the query string, the `Else` clause provides a default database name.  
 
 The database name is then passed to the `InWhiteList()` function (more on this function in a moment) to ensure the database name is valid. If it isn't, the app ends and the `DBNameError.aspx` page added in Step 3 is displayed. 
  
 Change 2: The single line in Change 2 assigns the now-approved database name to the `DB` key of the LDC. LDC stands for Local Data Collection. The LDC provides a way to pass ad hoc data around in an MR (or Wings or Monarch) app. 
 
-Change 3: Change stubs in the `InWhiteList()` function for approving the database name derived from the query string value provided. As provided here, this function unconditionally returns true, thereby approving all database names. Add your own logic here to approve database name values.
+Change 3: These lines add an `InWhiteList()` function for approving the database name derived from the query string value provided. As provided here, this function unconditionally returns true thereby approving all database names. Add your own logic here to approve database name values in some fashion.
 
 ### Step 5. Change the active database name for the app. 
 
-There is a file named MobileRPGJob.vr in the root folder of your project. Open it with Visual Studio and find the `Connect` subroutine (at about line 150 or 160). The end of that subroutine will look like this:
+There is a file named `MobileRPGJob.vr` in the root folder of your project. Open it with Visual Studio and find the `Connect` subroutine (at about line 150 or 160). The end of that subroutine will look like this:
    
             ...
             ...
